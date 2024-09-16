@@ -41,7 +41,7 @@ User mockUser = User(
   email: 'Kina.2022@gmail.com',
   address: 'Jl.Akatsuki',
   phoneNumber: '08254177521',
-  houseNumber: '2143262362',
+  houseNumber: 'A022',
   city: 'Itsakatchi',
   picturePath: 'https://i.pinimg.com/564x/35/8e/dc/358edc77f26d0480b69fe72d65ac917e.jpg',
 );

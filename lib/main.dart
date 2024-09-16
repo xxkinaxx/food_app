@@ -19,7 +19,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: DetailPage(onbBackButtonPressed: (){}, food: mockFoods[1],),
+      home: PaymentPage(transaction: Transaction(
+        id: 1,
+        food: mockFoods[1],
+        quantity: 5,
+        total: (mockFoods[1].price! * 5 * 1.1).toInt() + 50000,
+        dateTime: DateTime.now(),
+        status: TransactionStatus.pending,
+        user: mockUser
+      ),),
       debugShowCheckedModeBanner: false,
     );
   }
