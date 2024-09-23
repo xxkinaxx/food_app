@@ -6,7 +6,7 @@ class SuccessOrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IllustrationPage(
-      title: "You've Made Order",
+      title: "Your foods are on the way",
       subtitle: 'Just stay at home while we preparing the best food',
       picturePath: 'assets/bike.png',
       buttonTitle1: 'Order Other Foods',
