@@ -22,13 +22,13 @@ class Transaction extends Equatable {
   });
 
   Transaction copyWith({
-    required int id,
-    required Food food,
-    required int quantity,
-    required int total,
-    required DateTime dateTime,
-    required TransactionStatus status,
-    required User user,
+    int? id,
+    Food? food,
+    int? quantity,
+    int? total,
+    DateTime? dateTime,
+    TransactionStatus? status,
+    User? user,
   }){
     return Transaction(
       id: id ?? this.id,

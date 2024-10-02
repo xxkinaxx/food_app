@@ -8,7 +8,6 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
@@ -78,17 +77,49 @@ class _SignInPageState extends State<SignInPage> {
             margin: EdgeInsets.only(top: 24),
             padding: EdgeInsets.symmetric(horizontal: defaultMargin),
             child: isLoading
-                ? SpinKitFadingCircle(
-                    size: 45,
-                    color: mainColor,
-                  )
+                ? loadingIndicator
                 : ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: mainColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         )),
-                    onPressed: () {},
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      await context.read<UserCubit>().signIn(
+                            emailController.text,
+                            passwordController.text,
+                          );
+                      UserState state =
+                          context.read<UserCubit>().state;
+
+                      if (state is UserLoaded) {
+                        context.read<FoodCubit>().getFoods();
+                        context.read<TransactionCubit>().getTransaction();
+                        Get.to(() => MainPage());
+                      } else {
+                        Get.snackbar(
+                          "title",
+                          "message",
+                          backgroundColor: "D9435E".toColor(),
+                          icon: Icon(MdiIcons.closeCircleOutline,
+                              color: Colors.white),
+                          titleText: Text(
+                            'Sign In Failed',
+                            style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600),
+                          ),
+                          messageText: Text(
+                              "Please try again later",
+                            style: GoogleFonts.poppins(color: Colors.white),
+                          )
+                        );
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    },
                     child: Text('Login')),
           ),
           Container(
@@ -97,16 +128,17 @@ class _SignInPageState extends State<SignInPage> {
             margin: EdgeInsets.only(top: 12),
             padding: EdgeInsets.symmetric(horizontal: defaultMargin),
             child: ElevatedButton(
-              onPressed: (){
+              onPressed: () {
                 Get.to(() => SignUpPage());
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: greyColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)
-                )
+                  backgroundColor: greyColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
+              child: Text(
+                'Create an Account',
+                style: TextStyle(color: Colors.white),
               ),
-              child: Text('Create an Account', style: TextStyle(color: Colors.white),),
             ),
           )
         ],

@@ -2,10 +2,10 @@ part of 'pages.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage(
-      {super.key, required this.onbBackButtonPressed, required this.food});
+      {super.key, required this.onBackButtonPressed, this.transaction});
 
-  final Function onbBackButtonPressed;
-  final Food food;
+  final Function onBackButtonPressed;
+  final Transaction? transaction;
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -33,8 +33,8 @@ class _DetailPageState extends State<DetailPage> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: NetworkImage(
-                      widget.food?.picturePath ??
-                          'https://ui-avatars.com/api/?name=${widget.food!.name}',
+                      widget.transaction?.food?.picturePath ??
+                          'https://ui-avatars.com/api/?name=${widget.transaction?.food!.name}',
                     ),
                     fit: BoxFit.cover)),
           )),
@@ -49,8 +49,8 @@ class _DetailPageState extends State<DetailPage> {
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
                       onTap: () {
-                        if (widget.onbBackButtonPressed != null) {
-                          widget.onbBackButtonPressed();
+                        if (widget.onBackButtonPressed != null) {
+                          widget.onBackButtonPressed();
                         }
                       },
                       child: Container(
@@ -84,12 +84,12 @@ class _DetailPageState extends State<DetailPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${widget.food.name}',
+                                '${widget.transaction?.food?.name}',
                                 style: blackFontStyle2,
                                 maxLines: 1,
                               ),
                               RatingStars(
-                                rate: widget.food.rate,
+                                rate: widget.transaction?.food?.rate,
                               ),
                             ],
                           ),
@@ -160,7 +160,7 @@ class _DetailPageState extends State<DetailPage> {
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 14, 0, 16),
                         child: Text(
-                          widget.food!.description!,
+                          widget.transaction!.food!.description!,
                           style: blackFontStyle3,
                           textAlign: TextAlign.justify,
                         ),
@@ -182,7 +182,7 @@ class _DetailPageState extends State<DetailPage> {
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 4, 0, 41),
                         child: Text(
-                          widget.food!.ingredients!,
+                          widget.transaction!.food!.ingredients!,
                           style: blackFontStyle3,
                           textAlign: TextAlign.justify,
                         ),
@@ -212,25 +212,38 @@ class _DetailPageState extends State<DetailPage> {
                                       symbol: 'IDR',
                                       decimalDigits: 0,
                                       locale: 'id_ID')
-                                  .format(quantity * widget.food!.price!,),
+                                  .format(
+                                quantity * widget.transaction!.food!.price!,
+                              ),
                             )
                           ],
                         ),
                       ),
-                      SizedBox(height: 16,),
+                      SizedBox(
+                        height: 16,
+                      ),
                       // order button
                       SizedBox(
                         width: double.infinity,
                         height: 45,
                         child: ElevatedButton(
-                          onPressed: (){},
-                          child: Text('Order Now', style: blackFontStyle2.copyWith(color: Colors.white, fontWeight: FontWeight.bold),),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: mainColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
-                            )
+                          onPressed: () {
+                            Get.to(PaymentPage(
+                                transaction: widget.transaction!.copyWith(
+                                    quantity: quantity,
+                                    total: quantity * (widget.transaction?.food?.price!.toInt() ?? 0)
+                                )));
+                          },
+                          child: Text(
+                            'Order Now',
+                            style: blackFontStyle2.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: mainColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
                         ),
                       ),
                     ],
