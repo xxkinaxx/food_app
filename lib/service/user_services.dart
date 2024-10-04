@@ -1,8 +1,7 @@
 part of 'services.dart';
 
 class UserServices {
-  static Future<ApiReturnValue<User>> signIn(String email, String password,
-      {http.Client? client}) async {
+  static Future<ApiReturnValue<User>> signIn(String email, String password, {http.Client? client}) async {
     // await Future.delayed(Duration(seconds: 3));
     //
     // // login berhasil
@@ -28,14 +27,13 @@ class UserServices {
 
     var data = jsonDecode(response.body);
 
-    User.token = data['data']['token'];
+    User.token = data['data']['access_token'];
     User value = User.fromJson(data['data']['user']);
 
     return ApiReturnValue(value: value);
   }
 
-  static Future<ApiReturnValue<User>> signUp(User user, String password,
-      {File? pictureFile, http.Client? client}) async {
+  static Future<ApiReturnValue<User>> signUp(User user, String password, {File? pictureFile, http.Client? client}) async {
     if (client == null) {
       client = http.Client();
     }
@@ -45,16 +43,17 @@ class UserServices {
     var response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
-      body: {
-        'name': user.name,
-        'email': user.email,
+      // melakukan request
+      body: jsonEncode(<String, String>{
+        'name': user.name!,
+        'email': user.email!,
         'password': password,
         'password_confirmation': password,
-        'address': user.address,
-        'houseNumber': user.houseNumber,
-        'phoneNumber': user.phoneNumber,
-        'city': user.city,
-      },
+        'address': user.address!,
+        'houseNumber': user.houseNumber!,
+        'phoneNumber': user.phoneNumber!,
+        'city': user.city!,
+      },)
     );
 
     if (response.statusCode != 200) {
@@ -62,18 +61,22 @@ class UserServices {
     }
 
     var data = jsonDecode(response.body);
-    User.token = data['data']['token'];
+    User.token = data['data']['access_token'];
     User value = User.fromJson(data['data']['user']);
 
     // upload picture
     if(pictureFile != null){
       ApiReturnValue<String> result = await uploadPicturePath(pictureFile);
+
+      if(result.value != null){
+        value = value.copyWith(picturePath: "https://food.rtid73.com/storage/${result.value}");
+      }
     }
 
-    return ApiReturnValue();
+    return ApiReturnValue(value: value);
   }
 
-  static Future<ApiReturnValue<String>> uploadPicturePath(File? pictureFile, {http.MultipartRequest? request}) async {
+  static Future<ApiReturnValue<String>> uploadPicturePath(File pictureFile, {http.MultipartRequest? request}) async {
     String url = baseUrl + 'user/photo';
     var uri = Uri.parse(url);
 
@@ -83,7 +86,7 @@ class UserServices {
         ..headers['Authorization'] = 'Bearer ${User.token}';
     }
 
-    var multiPartFile = await http.MultipartFile.fromPath('file', pictureFile!.path);
+    var multiPartFile = await http.MultipartFile.fromPath('file', pictureFile.path);
     request.files.add(multiPartFile);
     var response = await request.send();
 

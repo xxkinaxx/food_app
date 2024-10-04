@@ -8,7 +8,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-
+  User? user;
+  File? pictureFile;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -19,37 +20,49 @@ class _SignUpPageState extends State<SignUpPage> {
       body: GeneralPage(
         title: "Sign Up",
         subtitle: "Create Your Account",
-        onBackButtonPressed: (){
+        onBackButtonPressed: () {
           Get.back();
         },
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.fromLTRB(defaultMargin, 26, defaultMargin, 6),
-              child: Text(
-                'Email Address',
-                style: blackFontStyle2,
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-              padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.black),
-              ),
-              child: TextField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintStyle: greyFontStyle,
-                    hintText: 'Type your Email here'),
-              ),
-            ),
+            //image
+            GestureDetector(
+                onTap: () async {
+                  XFile? pickedFile = await ImagePicker()
+                      .pickImage(source: ImageSource.gallery);
+
+                  if (pickedFile != null) {
+                    pictureFile = File(pickedFile.path);
+                    setState(() {});
+                  }
+                },
+                child: Container(
+                  width: 110,
+                  height: 110,
+                  margin: EdgeInsets.only(top: 26),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/photo_border.png'))),
+                  child: (pictureFile != null)
+                      ? Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: FileImage(pictureFile!),
+                                fit: BoxFit.cover),
+                          ),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: AssetImage('assets/photo.png'),
+                                fit: BoxFit.cover),
+                          ),
+                        ),
+                )),
+            // name
             Container(
               width: double.infinity,
               margin: EdgeInsets.fromLTRB(defaultMargin, 26, defaultMargin, 6),
@@ -76,6 +89,34 @@ class _SignUpPageState extends State<SignUpPage> {
                     hintText: 'Type your Name here'),
               ),
             ),
+            // email
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.fromLTRB(defaultMargin, 26, defaultMargin, 6),
+              child: Text(
+                'Email Address',
+                style: blackFontStyle2,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+              padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.black),
+              ),
+              child: TextField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintStyle: greyFontStyle,
+                    hintText: 'Type your Email here'),
+              ),
+            ),
+            // password
             Container(
               width: double.infinity,
               margin: EdgeInsets.fromLTRB(defaultMargin, 6, defaultMargin, 6),
@@ -102,6 +143,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     hintText: 'Type your Password here'),
               ),
             ),
+            // button
             Container(
               width: double.infinity,
               height: 45,
@@ -114,28 +156,17 @@ class _SignUpPageState extends State<SignUpPage> {
                         borderRadius: BorderRadius.circular(10),
                       )),
                   onPressed: () {
-                    Get.to(AddressPage());
+                    Get.to(() => AddressPage(
+                      user: User(
+                        name: nameController.text,
+                        email: emailController.text,
+                      ),
+                      password: passwordController.text,
+                      pictureFile: pictureFile!,
+                    ));
                   },
-                  child: Text('Continue')),
+                  child: Text('Continue', style: blackFontStyle3.copyWith(color: Colors.white),)),
             ),
-            Container(
-              width: double.infinity,
-              height: 45,
-              margin: EdgeInsets.only(top: 12),
-              padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-              child: ElevatedButton(
-                onPressed: (){
-                  Get.to(() => SignUpPage());
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: greyColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-                child: Text('Create an Account', style: TextStyle(color: Colors.white),),
-              ),
-            )
           ],
         ),
       ),
