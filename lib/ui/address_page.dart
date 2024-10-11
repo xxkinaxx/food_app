@@ -171,7 +171,7 @@ class _AddressPageState extends State<AddressPage> {
                           borderRadius: BorderRadius.circular(10),
                         )),
                     onPressed: () async {
-                      User user = widget.user!.copyWith(
+                      User user = widget.user.copyWith(
                         address: addressController.text,
                         phoneNumber: phoneNumberController.text,
                         houseNumber: houseNumberController.text,

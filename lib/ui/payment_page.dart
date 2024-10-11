@@ -190,7 +190,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       NumberFormat.currency(
                               symbol: 'IDR', decimalDigits: 0, locale: 'id_ID')
                           .format(widget.transaction.total! +
-                              (widget.transaction.total! * 0.1) +
+                              (widget.transaction.food!.price! * widget.transaction.quantity! * 0.1) +
                               50000),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     )
@@ -294,15 +294,15 @@ class _PaymentPageState extends State<PaymentPage> {
                       setState(() {
                         isLoading = true;
                       });
-                      bool result = await context
+                      var paymentUrl = await context
                           .read<TransactionCubit>()
                           .submitTransaction(widget.transaction.copyWith(
                             dateTime: DateTime.now(),
                             total: (widget.transaction.total! * 1.1 + 50000)
                                 .toInt(),
                           ));
-                      if(result){
-                        Get.to(SuccessOrderPage());
+                      if(paymentUrl != null){
+                        Get.to(PaymentMethodPages(paymentUrl: paymentUrl));
                       } else {
                         Get.snackbar(
                             "title",

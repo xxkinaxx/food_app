@@ -43,7 +43,9 @@ class FoodOrderItem extends StatelessWidget {
                         Text('${transaction.quantity} item(s) ~ '),
                         Text(
                           NumberFormat.currency(
-                              symbol: 'IDR', decimalDigits: 0, locale: 'id-ID')
+                                  symbol: 'IDR',
+                                  decimalDigits: 0,
+                                  locale: 'id-ID')
                               .format(transaction.total),
                         ),
                       ],
@@ -57,55 +59,59 @@ class FoodOrderItem extends StatelessWidget {
                   Text(convertDataTimeDisplay(transaction.dateTime!)),
                   (transaction.status == TransactionStatus.delivered)
                       ? Container(
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(15)),
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      'Delivered',
-                      style: blackFontStyle2.copyWith(color: Colors.white),
-                    ),
-                  )
+                          decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(15)),
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          child: Text(
+                            'Delivered',
+                            style:
+                                blackFontStyle2.copyWith(color: Colors.white),
+                          ),
+                        )
                       : (transaction.status == TransactionStatus.canceled)
-                      ? Container(
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(15)),
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      'Canceled',
-                      style:
-                      blackFontStyle2.copyWith(color: Colors.white),
-                    ),
-                  )
-                      : (transaction.status == TransactionStatus.pending)
-                      ? Container(
-                    decoration: BoxDecoration(
-                        color: Colors.orangeAccent,
-                        borderRadius: BorderRadius.circular(15)),
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      'Pending',
-                      style: blackFontStyle2.copyWith(
-                          color: Colors.white),
-                    ),
-                  )
-                      : Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blueAccent,
-                        borderRadius: BorderRadius.circular(15)),
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: Row(
-                      children: [
-                        Text(
-                          'On Delivery',
-                          style: blackFontStyle2.copyWith(
-                              color: Colors.white),
-                        ),
-                        Icon(Icons.motorcycle, color: Colors.white,)
-                      ],
-                    ),
-                  )
+                          ? Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(15)),
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Text(
+                                'Canceled',
+                                style: blackFontStyle2.copyWith(
+                                    color: Colors.white),
+                              ),
+                            )
+                          : (transaction.status == TransactionStatus.pending)
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.orangeAccent,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: Text(
+                                    'Pending',
+                                    style: blackFontStyle2.copyWith(
+                                        color: Colors.white),
+                                  ),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.blueAccent,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'On Delivery',
+                                        style: blackFontStyle2.copyWith(
+                                            color: Colors.white),
+                                      ),
+                                      Icon(
+                                        Icons.motorcycle,
+                                        color: Colors.white,
+                                      )
+                                    ],
+                                  ),
+                                )
                 ],
               )
             ],

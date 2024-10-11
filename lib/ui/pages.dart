@@ -17,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:supercharged/supercharged.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'sign_in_page.dart';
 part 'sign_up_page.dart';
@@ -31,3 +32,4 @@ part 'order_history_page.dart';
 part 'success_order_page.dart';
 part 'success_sign_up_page.dart';
 part 'profile_page.dart';
+part 'payment_method_pages.dart';

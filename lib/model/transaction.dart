@@ -10,6 +10,7 @@ class Transaction extends Equatable {
   final DateTime? dateTime;
   final TransactionStatus? status;
   final User? user;
+  final String? paymentUrl;
 
   Transaction({
     this.id,
@@ -19,6 +20,7 @@ class Transaction extends Equatable {
     this.dateTime,
     this.status,
     this.user,
+    this.paymentUrl,
   });
 
   Transaction copyWith({
@@ -29,41 +31,43 @@ class Transaction extends Equatable {
     DateTime? dateTime,
     TransactionStatus? status,
     User? user,
-  }){
+  }) {
     return Transaction(
-      id: id ?? this.id,
-      food: food ?? this.food,
-      quantity: quantity ?? this.quantity,
-      total: total ?? this.total,
-      dateTime: dateTime ?? this.dateTime,
-      status: status ?? this.status,
-      user: user ?? this.user
-    );
+        id: id ?? this.id,
+        food: food ?? this.food,
+        quantity: quantity ?? this.quantity,
+        total: total ?? this.total,
+        dateTime: dateTime ?? this.dateTime,
+        status: status ?? this.status,
+        user: user ?? this.user);
   }
 
+  factory Transaction.fromJson(Map<String, dynamic> data) => Transaction(
+      id: data['id'],
+      food: Food.fromJson(data['food']),
+      quantity: data['quantity'],
+      total: data['total'],
+      dateTime: DateTime.fromMillisecondsSinceEpoch(data['created_at']),
+      paymentUrl: data['payment_url'],
+      status: data['status'] == 'PENDING' ? TransactionStatus.pending
+          : data['status'] == 'ON_DELIVERY' ? TransactionStatus.on_delivery
+          : data['status'] == 'CANCELED' ? TransactionStatus.canceled
+          : TransactionStatus.delivered);
+
   @override
-  // TODO: implement props
-  List<Object?> get props => [
-    id,
-    food,
-    quantity,
-    total,
-    dateTime,
-    status,
-    user
-  ];
+  List<Object?> get props =>
+      [id, food, quantity, total, dateTime, status, user];
 }
 
 List<Transaction> mockTransaction = [
   Transaction(
-    id: 1,
-    food: mockFoods[1],
-    quantity: 1,
-    total: (mockFoods[1].price! * 1.1).toInt() + 50000,
-    dateTime: DateTime.now(),
-    status: TransactionStatus.delivered,
-    user: mockUser
-  ),
+      id: 1,
+      food: mockFoods[1],
+      quantity: 1,
+      total: (mockFoods[1].price! * 1.1).toInt() + 50000,
+      dateTime: DateTime.now(),
+      status: TransactionStatus.delivered,
+      user: mockUser),
   Transaction(
       id: 2,
       food: mockFoods[3],
@@ -71,8 +75,7 @@ List<Transaction> mockTransaction = [
       total: (mockFoods[3].price! * 4 * 1.1).toInt() + 50000,
       dateTime: DateTime.now(),
       status: TransactionStatus.on_delivery,
-      user: mockUser
-  ),
+      user: mockUser),
   Transaction(
       id: 3,
       food: mockFoods[4],
@@ -80,8 +83,7 @@ List<Transaction> mockTransaction = [
       total: (mockFoods[4].price! * 6 * 1.1).toInt() + 50000,
       dateTime: DateTime.now(),
       status: TransactionStatus.pending,
-      user: mockUser
-  ),
+      user: mockUser),
   Transaction(
       id: 4,
       food: mockFoods[5],
@@ -89,6 +91,5 @@ List<Transaction> mockTransaction = [
       total: (mockFoods[5].price! * 3 * 1.1).toInt() + 50000,
       dateTime: DateTime.now(),
       status: TransactionStatus.canceled,
-      user: mockUser
-  ),
+      user: mockUser),
 ];

@@ -15,8 +15,7 @@ final class UserLoaded extends UserState {
   UserLoaded(this.user);
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [user];
+  List<Object?> get props => [];
 }
 
 final class UserLoadingFailed extends UserState {
@@ -25,6 +24,5 @@ final class UserLoadingFailed extends UserState {
   UserLoadingFailed(this.message);
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [message];
+  List<Object?> get props => [];
 }

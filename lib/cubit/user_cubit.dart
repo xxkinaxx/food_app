@@ -36,10 +36,16 @@ class UserCubit extends Cubit<UserState> {
     if (result.value != null) {
       emit(UserLoaded((state as UserLoaded).user.copyWith(
           picturePath: 'https://food.rtid73.com/storage/${result.value}')));
-    }
+    } else {}
   }
 
   Future<void> signOut() async {
-    emit(UserInitial());
+    ApiReturnValue<bool> result = await UserServices.logout();
+
+    if(result.value != null){
+      emit(UserInitial());
+    } else {
+      emit(UserLoadingFailed(result.message!));
+    }
   }
 }

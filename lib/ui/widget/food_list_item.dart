@@ -23,27 +23,34 @@ class FoodListItem extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                food?.name ?? 'No Name',
-                style: blackFontStyle2,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
+              SizedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      food?.name ?? 'No Name',
+                      style: blackFontStyle2,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      NumberFormat.currency(
+                          symbol: 'IDR', decimalDigits: 0, locale: 'id-ID')
+                          .format(food?.price),
+                    )
+                  ],
+                ),
               ),
-              Text(
-                NumberFormat.currency(
-                        symbol: 'IDR', decimalDigits: 0, locale: 'id-ID')
-                    .format(food?.price),
+              RatingStars(
+                rate: food?.rate,
               )
             ],
           ),
         ),
-        RatingStars(
-          rate: food?.rate,
-        )
       ],
     );
   }
