@@ -171,40 +171,58 @@ class _AddressPageState extends State<AddressPage> {
                           borderRadius: BorderRadius.circular(10),
                         )),
                     onPressed: () async {
-                      User user = widget.user.copyWith(
-                        address: addressController.text,
-                        phoneNumber: phoneNumberController.text,
-                        houseNumber: houseNumberController.text,
-                        city: selectedCity,
-                      );
-                      setState(() {
-                        isLoading = true;
-                      });
-                      await context.read<UserCubit>().signUp(
-                          user, widget.password,
-                          pictureFile: widget.pictureFile);
-
-                      UserState state = context.read<UserCubit>().state;
-
-                      if (state is UserLoaded) {
-                        context.read<FoodCubit>().getFoods();
-                        context.read<TransactionCubit>().getTransaction();
-                        Get.to(() => MainPage());
-                      } else {
-                        Get.snackbar("", "",
+                      if(addressController.text =="" || phoneNumberController.text == "" || houseNumberController.text== ""){
+                        Get.snackbar(
+                            "title",
+                            "message",
                             backgroundColor: "D9435E".toColor(),
                             icon: Icon(MdiIcons.closeCircleOutline,
                                 color: Colors.white),
                             titleText: Text(
-                              'Sign In Failed',
-                              style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
+                              'Please fill all the field',
+                              style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600),
                             ),
                             messageText: Text(
-                              "Please try again later",
+                              "We don't want to miss you",
                               style: GoogleFonts.poppins(color: Colors.white),
-                            ));
+                            )
+                        );
+                      } else {
+                        User user = widget.user.copyWith(
+                          address: addressController.text,
+                          phoneNumber: phoneNumberController.text,
+                          houseNumber: houseNumberController.text,
+                          city: selectedCity,
+                        );
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await context.read<UserCubit>().signUp(
+                            user, widget.password,
+                            pictureFile: widget.pictureFile);
+
+                        UserState state = context.read<UserCubit>().state;
+
+                        if (state is UserLoaded) {
+                          context.read<FoodCubit>().getFoods();
+                          context.read<TransactionCubit>().getTransaction();
+                          Get.to(() => MainPage());
+                        } else {
+                          Get.snackbar("", "",
+                              backgroundColor: "D9435E".toColor(),
+                              icon: Icon(MdiIcons.closeCircleOutline,
+                                  color: Colors.white),
+                              titleText: Text(
+                                'Sign In Failed',
+                                style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              messageText: Text(
+                                "Please try again later",
+                                style: GoogleFonts.poppins(color: Colors.white),
+                              ));
+                        }
                       }
                     },
                     child: Text(

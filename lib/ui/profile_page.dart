@@ -28,31 +28,33 @@ class _ProfilePageState extends State<ProfilePage> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: NetworkImage('https://i.pinimg.com/564x/6d/20/2d/6d202d38b84c6ec1011f6b3f3cf848e8.jpg'),
+                    image: AssetImage('assets/photo_border.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
                 child: Container(
                   width: double.infinity,
                   height: double.infinity,
-                  margin: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
+                  margin: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
                     image: DecorationImage(
-                        image: AssetImage(
-                          "assets/photo.png",
-                        ),
+                        image: NetworkImage((context.read<UserCubit>().state as UserLoaded)
+                            .user
+                            .picturePath ??
+                            'https://ui_avatars.com/api/?name=${(context.read<UserCubit>().state as UserLoaded).user.name}',),
                         fit: BoxFit.cover),
                   ),
                 ),
               ),
               Text(
-                mockUser.name ?? "name",
+                (context.read<UserCubit>().state as UserLoaded).user.name ?? 'UserName',
                 style: blackFontStyle1.copyWith(
                   color: Colors.black,
                 ),
               ),
               Text(
-                mockUser.email ?? "email",
+                (context.read<UserCubit>().state as UserLoaded).user.email ?? 'Email',
                 style: blackFontStyle2.copyWith(),
               ),
             ],
@@ -61,22 +63,22 @@ class _ProfilePageState extends State<ProfilePage> {
         Container(
           color: Colors.white,
           height: MediaQuery.of(context).size.height - 320,
-          padding: const EdgeInsets.all(defaultMargin),
+          padding:  EdgeInsets.all(defaultMargin),
           child: Column(
             children: [
               CustomTabBar(
                 selectedIndex: selectedIndex,
-                titles: const ["Account", "Food Market"],
+                titles:  ["Account", "Food Market"],
                 onTap: (index) {
                   setState(() {
                     selectedIndex = index;
                   });
                 },
               ),
-              const SizedBox(
+               SizedBox(
                 height: 16,
               ),
-              (selectedIndex == 0) ? const AccountTab() : const FoodMarketTab(),
+              (selectedIndex == 0) ?  AccountTab() :  FoodMarketTab(),
             ],
           ),
         ),
@@ -86,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class AccountTab extends StatelessWidget {
-  const AccountTab({super.key});
+   AccountTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -109,11 +111,11 @@ class AccountTab extends StatelessWidget {
 }
 
 class FoodMarketTab extends StatelessWidget {
-  const FoodMarketTab({super.key});
+   FoodMarketTab({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
         RowTab(title: 'Rate App'),
         RowTab(title: 'Help Center'),
@@ -125,7 +127,7 @@ class FoodMarketTab extends StatelessWidget {
 }
 
 class RowTab extends StatelessWidget {
-  const RowTab({
+   RowTab({
     super.key,
     required this.title,
   });
